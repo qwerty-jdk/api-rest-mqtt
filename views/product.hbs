@@ -1,0 +1,22 @@
+<script type="text/javascript">
+
+    let productList = document.createElement('ul');
+
+    const myHeadres = new Headers();
+    myHeadres.append('authorization', `Bearer ${localStorage.token}`);
+
+    fetch('/api/sensor', {
+        method: 'GET',
+        headers: myHeadres
+    })
+    .then(res => res.json())
+    .then(data => {
+        data.sensores.map(sensor => {
+            let text = document.createTextNode(sensor.ubication);
+            let elem = document.createElement('li');
+            elem.appendChild(text);
+            productList.appendChild(elem);
+        });
+        document.body.appendChild(productList);
+    });
+</script>

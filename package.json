@@ -1,0 +1,25 @@
+{
+  "name": "mqtt-example",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node run.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt-nodejs": "0.0.3",
+    "body-parser": "^1.18.2",
+    "express": "^4.16.2",
+    "express-handlebars": "^3.0.0",
+    "jwt-simple": "^0.5.1",
+    "moment": "^2.19.3",
+    "mongoose": "^4.13.6",
+    "mqtt": "^2.14.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.12.1"
+  }
+}
