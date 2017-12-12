@@ -7,7 +7,7 @@ function getTemp(req, res){
     Temp.findOne({ location : req.body.location }, (err, data) => {
         if(err) res.status(500).send(`Error al intentar buscar en la base de datos: ${err}`);
         if(!data) res.status(401).send('Temp no existe');
-        //console.log(`getTemp: ${data}`);
+        console.log(`getTemp: ${data}`);
         res.status(200).send(data);
     });
 
@@ -15,14 +15,22 @@ function getTemp(req, res){
 
 function getTemps(req, res){
     
-        Temp.find({}, (err, list) => {
-            if(err) res.status(500).send(`Error al intentar buscar en la base de datos: ${err}`);
-            if(list.length > 0){
-                res.status(200).send(list);
-            } else res.status(401).send('No existe ningun Temp');
-        });
+    getAll()
+    .then(response => res.status(response.code).send(response.message))
+    .catch(response => res.status(response.code).send(response.message));
     
-    }
+}
+
+function getAll(){
+    const promise = new Promise((resolve, reject) => {
+        Temp.find({}, (err, list) => {
+            if(err) reject({ code: 500, message: `Error al intentar buscar en la base de datos: ${err}` });
+            if(list.length > 0) resolve({ code: 200, message: list });
+            else reject({ code: 401, message: 'No existe ningun Temp' });
+        });
+    });
+    return promise;
+}
 
 function saveTemp(req, res){
 
@@ -53,7 +61,7 @@ function updateTemp(req, res){
 
     Temp.findOneAndUpdate({ location : req.body.location }, changes, (err, data) => {
         if(err) res.status(500).send(`Error al intentar buscar en la base de datos: ${err}`);
-        //console.log(`updateTemp: ${data}`);
+        console.log(`updateTemp: ${data}`);
         res.status(200).send(data);    
     });
 
@@ -72,6 +80,7 @@ function deleteTemp(req, res){
 module.exports = {
     getTemp,
     getTemps,
+    getAll,
     saveTemp,
     updateTemp,
     deleteTemp

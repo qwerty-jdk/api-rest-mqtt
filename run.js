@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const myConfig = require('./config');
 const app = require('./app');
+const mqttClent = require('./services/mqtt');
 
 mongoose.connect(myConfig.db, { useMongoClient: true }, (err,res) => {
 	if(err){

@@ -1,6 +1,6 @@
 'use strict'
 
-const service = require('../services');
+const service = require('../services/tocken');
 
 function isAuth(req, res, next){
     if(!req.headers.authorization) return res.status(403).send({message: 'No tienes autorización'});

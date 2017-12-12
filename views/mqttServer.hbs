@@ -1,0 +1,31 @@
+<h1>Servidor MQTT</h1>
+<form action="api/mqttServer" method="POST">
+    <input id="_id" name="_id" type="hidden">
+    <p>URL: <input id="url" type="text" name="url" placeholder="node.server.com"></p>
+    <p>Port: <input id="port" type="number" name="port" placeholder="1883"></p>
+    <p>Usuario: <input id="username" type="text" name="username" placeholder="User"></p>
+    <p>Contraseña: <input id="password" type="password" name="password" placeholder="Password"></p>
+    <p><input type="submit" value="Guardar"></p>
+</form>
+<script type="text/javascript">
+
+    let _id = document.getElementById('_id');
+    let url = document.getElementById('url');
+    let port = document.getElementById('port');
+    let username = document.getElementById('username');
+    let password = document.getElementById('password');
+
+    fetch('api/mqttServer', { method: 'GET' }).
+    then(res => res.json() )
+    .then(response => {
+        if(response.code == 200){
+            let data = response.message;
+            _id.value = data._id;
+            url.value = data.url.split("//")[1];
+            port.value = data.port;
+            username.value = data.username;
+            password.value = data.password;
+        }
+    });
+
+</script>

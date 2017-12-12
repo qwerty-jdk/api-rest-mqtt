@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const lightRouter = require('./routers/light');
 const tempRouter = require('./routers/temp');
 const doorRouter = require('./routers/door');
+const mqttRouter = require('./routers/mqttServer');
 const hbs = require('express-handlebars');
 const app = express();
 
@@ -18,10 +19,16 @@ app.set('view engine', '.hbs');
 app.use('/api', lightRouter);
 app.use('/api', tempRouter);
 app.use('/api', doorRouter);
+app.use('/api', mqttRouter);
 
 //Se habilita ruta para iniciar sesión y obtener token para realizar pruebas
 app.get('/login', (req,res) => {
     res.render('login', {title: 'Cliente API REST'});
+});
+
+//Se habilita ruta para configurar servidor mqtt
+app.get('/mqtt', (req,res) => {
+    res.render('mqttServer', {title: 'Settings MQTT'});
 });
 
 module.exports = app;

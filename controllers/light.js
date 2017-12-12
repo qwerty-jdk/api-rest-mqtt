@@ -7,7 +7,7 @@ function getLight(req, res){
     Light.findOne({ location : req.body.location }, (err, data) => {
         if(err) res.status(500).send(`Error al intentar buscar en la base de datos: ${err}`);
         if(!data) res.status(401).send('Light no existe');
-        //console.log(`getLight: ${data}`);
+        console.log(`getLight: ${data}`);
         res.status(200).send(data);
     });
 
@@ -15,14 +15,22 @@ function getLight(req, res){
 
 function getLights(req, res){
     
-        Light.find({}, (err, list) => {
-            if(err) res.status(500).send(`Error al intentar buscar en la base de datos: ${err}`);
-            if(list.length > 0){
-                res.status(200).send(list);
-            } else res.status(401).send('No existe ningun Light');
-        });
+    getAll()
+    .then(response => res.status(response.code).send(response.message))
+    .catch(response => res.status(response.code).send(response.message));
     
-    }
+}
+
+function getAll(){
+    const promise = new Promise((resolve, reject) => {
+        Light.find({}, (err, list) => {
+            if(err) reject({ code: 500, message: `Error al intentar buscar en la base de datos: ${err}` });
+            if(list.length > 0) resolve({ code: 200, message: list });
+            else reject({ code: 401, message: 'No existe ningun Light' });
+        });
+    });
+    return promise;
+}
 
 function saveLight(req, res){
 
@@ -53,7 +61,7 @@ function updateLight(req, res){
 
     Light.findOneAndUpdate({ location : req.body.location }, changes, (err, data) => {
         if(err) res.status(500).send(`Error al intentar buscar en la base de datos: ${err}`);
-        //console.log(`updateLight: ${data}`);
+        console.log(`updateLight: ${data}`);
         res.status(200).send(data);    
     });
 
@@ -72,6 +80,7 @@ function deleteLight(req, res){
 module.exports = {
     getLight,
     getLights,
+    getAll,
     saveLight,
     updateLight,
     deleteLight
