@@ -50,6 +50,22 @@ function saveTemp(req, res){
 
 }
 
+function changeStatus(topic, value){
+    const promise = new Promise((resolve, reject) => {
+        let changes = { 
+            $set:{ 
+                status: value.toString().split(':')[0], 
+                maxTemp: value.toString().split(':')[1]
+            } 
+        };
+        Temp.findOneAndUpdate({location: topic}, changes, (err, data) => {
+            if(err) reject({ code:500, message: `Error al tratar de cambiar el estado: ${err}` });
+            resolve({ code: 200, message: data });
+        });
+    });
+    return promise;
+}
+
 function updateTemp(req, res){
   
     let changes = {
@@ -82,6 +98,7 @@ module.exports = {
     getTemps,
     getAll,
     saveTemp,
+    changeStatus,
     updateTemp,
     deleteTemp
 }

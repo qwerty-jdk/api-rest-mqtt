@@ -50,6 +50,22 @@ function saveLight(req, res){
 
 }
 
+function changeStatus(topic, value){
+    const promise = new Promise((resolve, reject) => {
+        let changes = { 
+            $set:{ 
+                status: value.toString().split(':')[0], 
+                mode: value.toString().split(':')[1] 
+            } 
+        };
+        Light.findOneAndUpdate({location: topic}, changes, (err, data) => {
+            if(err) reject({ code:500, message: `Error al tratar de cambiar el estado: ${err}` });
+            resolve({ code: 200, message: data });
+        });
+    });
+    return promise;
+}
+
 function updateLight(req, res){
 
     let changes = {
@@ -82,6 +98,7 @@ module.exports = {
     getLights,
     getAll,
     saveLight,
+    changeStatus,
     updateLight,
     deleteLight
 }

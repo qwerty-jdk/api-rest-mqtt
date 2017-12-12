@@ -43,6 +43,17 @@ function saveDoor(req, res){
 
 }
 
+function changeStatus(topic, value){
+    const promise = new Promise((resolve, reject) => {
+        let changes = { $set:{ status: value } };
+        Door.findOneAndUpdate({location: topic}, changes, (err, data) => {
+            if(err) reject({ code:500, message: `Error al tratar de cambiar el estado: ${err}` });
+            resolve({ code: 200, message: data });
+        });
+    });
+    return promise;
+}
+
 function updateDoor(req, res){
 
     let changes = {
@@ -73,6 +84,7 @@ function deleteDoor(req, res){
 module.exports = {
     getDoor,
     Get,
+    changeStatus,
     saveDoor,
     updateDoor,
     deleteDoor

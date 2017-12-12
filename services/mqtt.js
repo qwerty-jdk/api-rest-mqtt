@@ -13,14 +13,13 @@ ServerMqtt.then(response => {
             console.log('MQTT conectado');
 
             //Aquí se indican todos los sensores a los que se suscribe para recibir publicaciones.
-            door.Get()
-            .then(response => { if(response.code == 200) client.subscribe(response.message.location) });
+            door.Get().then(response => { if(response.code == 200) client.subscribe('door:'+response.message.location) });
 
             light.getAll().then(response => {
                 if(response.code == 200){
                     let list = response.message;
                     if(list.length > 0){
-                        for(i=0;i<list.length;i++) client.subscribe(list[i].location);
+                        for(i=0;i<list.length;i++) client.subscribe('light:'+list[i].location);
                     }
                 }
             });
@@ -29,21 +28,26 @@ ServerMqtt.then(response => {
                 if(response.code == 200){
                     let list = response.message;
                     if(list.length > 0){
-                        for(i=0;i<list.length;i++) client.subscribe(list[i].location);
+                        for(i=0;i<list.length;i++) client.subscribe('temp:'+list[i].location);
                     }
                 }
             });
 
         });
         
-        client.on('message', (topic, message, package) => {
-            console.log({
-                topico: topic,
-                message: message.toString()
-            });
+        client.on('message', (header, value, package) => {
+            try{
+                let type = header.split(':')[0];
+                let topic = header.split(':')[1];
+                switch(type){
+                    case 'door': door.changeStatus(topic, value).then(response => console.log({ response })); break;
+                    case 'light': light.changeStatus(topic, value).then(response => console.log({ response })); break;
+                    case 'temp': temp.changeStatus(topic, value).then(response => console.log({ response })); break;
+                    default: console.log({header, value, message: 'No se realizaron cambios'}); break;
+                }
+            }catch(err){ console.log({header, value, message: `Error al realizar cambios: ${err}`}) }
         });
-        
-        //mqttClient.publish('test','Hola Mundo');
+
     }
 })
 .catch(err => console.log(err));
