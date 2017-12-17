@@ -3,7 +3,7 @@
 const MqttServer = require('../models/mqttBroker');
 
 function getMqttServer(req, res){
-
+    
     getServer()
     .then(data => {
         res.status(200).send(data);
@@ -16,7 +16,7 @@ function getServer(){
         MqttServer.findOne({}, (err, data) => {
             if(err) reject({ code: 500, message: `Error al intentar buscar en la base de datos: ${err}` });
             if(!data) reject({ code: 401, message: 'mqttServer no existe' });
-            resolve({ code : 200, message: data });
+            resolve(data);
         });
     });
     return promise;
