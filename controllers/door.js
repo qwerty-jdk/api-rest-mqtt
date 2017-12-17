@@ -13,12 +13,20 @@ function getDoor(req, res){
 
 }
 
-function Get(){
+function getDoors(req, res){
+    
+    getAll()
+    .then(response => res.status(response.code).send(response.message))
+    .catch(response => res.status(response.code).send(response.message));
+    
+}
+
+function getAll(){
 
     const promise = new Promise((resolve, reject) => {
         Door.find({}, (err, list) => {
             if(err) reject({ code: 500, message: `Error al intentar buscar en la base de datos: ${err}` });
-            if(list.length > 0) resolve({ code: 200, message: list[0] });
+            if(list.length > 0) resolve({ code: 200, message: list });
             else reject({ code: 401, message: 'No existe ningun Door' });
         });
     });
@@ -83,7 +91,8 @@ function deleteDoor(req, res){
 
 module.exports = {
     getDoor,
-    Get,
+    getDoors,
+    getAll,
     changeStatus,
     saveDoor,
     updateDoor,

@@ -5,6 +5,7 @@ const auth = require('../middelwares/auth');
 const doorRouter = require('express').Router();
 
 doorRouter.get('/door', doorController.getDoor);
+doorRouter.get('/doors', doorController.getDoors);
 doorRouter.post('/door', doorController.saveDoor);
 doorRouter.put('/door', doorController.updateDoor);
 doorRouter.delete('/door', doorController.deleteDoor);

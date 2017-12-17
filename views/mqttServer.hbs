@@ -18,14 +18,12 @@
     fetch('api/mqttServer', { method: 'GET' }).
     then(res => res.json() )
     .then(response => {
-        if(response.code == 200){
-            let data = response.message;
-            _id.value = data._id;
-            url.value = data.url.split("//")[1];
-            port.value = data.port;
-            username.value = data.username;
-            password.value = data.password;
-        }
+        let data = response;
+        _id.value = data._id;
+        url.value = data.url.split("//")[1];
+        port.value = data.port;
+        username.value = data.username;
+        password.value = data.password;
     });
 
 </script>
