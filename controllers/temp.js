@@ -38,6 +38,7 @@ function saveTemp(req, res){
         location: req.body.location,
         displayName: req.body.displayName,
         status: req.body.status,
+        currentTemp: req.body.currentTemp,
         maxTemp: req.body.maxTemp,
         image: req.body.image
     });
@@ -58,6 +59,17 @@ function changeStatus(topic, value){
                 maxTemp: value.toString().split(':')[1]
             } 
         };
+        Temp.findOneAndUpdate({location: topic}, changes, (err, data) => {
+            if(err) reject({ code:500, message: `Error al tratar de cambiar el estado: ${err}` });
+            resolve({ code: 200, message: data });
+        });
+    });
+    return promise;
+}
+
+function changeTemp(topic, tempValue){
+    let changes = { $set:{ currentTemp: tempValue.toString() } };
+    const promise = new Promise((resolve, reject) => {
         Temp.findOneAndUpdate({location: topic}, changes, (err, data) => {
             if(err) reject({ code:500, message: `Error al tratar de cambiar el estado: ${err}` });
             resolve({ code: 200, message: data });
@@ -99,6 +111,7 @@ module.exports = {
     getAll,
     saveTemp,
     changeStatus,
+    changeTemp,
     updateTemp,
     deleteTemp
 }

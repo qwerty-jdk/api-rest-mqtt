@@ -34,7 +34,10 @@ ServerMqtt.then(response => {
             if(response.code == 200){
                 let list = response.message;
                 if(list.length > 0){
-                    for(i=0;i<list.length;i++) client.subscribe('temp$'+list[i].location);
+                    for(i=0;i<list.length;i++){
+                        client.subscribe('temp$'+list[i].location);
+                        client.subscribe('tempValue$'+list[i].location);
+                    }
                 }
             }
         });
@@ -43,13 +46,13 @@ ServerMqtt.then(response => {
     
     client.on('message', (header, value, package) => {
         try{
-            console.log(header);
             let type = header.split('$')[0];
             let topic = header.split('$')[1];
             switch(type){
                 case 'door': door.changeStatus(topic, value).then(response => console.log({ response })); break;
                 case 'light': light.changeStatus(topic, value).then(response => console.log({ response })); break;
                 case 'temp': temp.changeStatus(topic, value).then(response => console.log({ response })); break;
+                case 'tempValue': temp.changeTemp(topic, value).then(response => console.log({ response })); break;
                 default: console.log({header, value, message: 'No se realizaron cambios'}); break;
             }
         }catch(err){ console.log({header, value, message: `Error al realizar cambios: ${err}`}) }

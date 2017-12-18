@@ -7,6 +7,7 @@ const TempSchema = ({
     location : String,
     displayName: String,
     status: { type: String, enum : ['on', 'off', 'auto'] },
+    currentTemp: Number,
     maxTemp: Number,
     image: Number
 });
