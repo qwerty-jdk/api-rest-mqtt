@@ -8,7 +8,7 @@ const LightSchema = ({
     displayName: String,
     status: { type: String, enum : ['on', 'off', 'auto'] },
     mode: { type: String, enum: ['low', 'medium', 'high']},
-    image: Number,
+    image: String,
     methodName: String
 });
 

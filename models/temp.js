@@ -9,7 +9,7 @@ const TempSchema = ({
     status: { type: String, enum : ['on', 'off', 'auto'] },
     currentTemp: Number,
     maxTemp: Number,
-    image: Number
+    image: String
 });
 
 module.exports = mongoose.model('Temp', TempSchema);

@@ -7,7 +7,7 @@ const DoorSchema = ({
     location : String,
     displayName: String,
     status: { type: String, enum : ['on', 'off'] },
-    image: Number
+    image: String
 });
 
 module.exports = mongoose.model('Door', DoorSchema);
